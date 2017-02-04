@@ -29,9 +29,32 @@ namespace WebApiFrame
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            System.Console.WriteLine($"Current State: {env.EnvironmentName}");
+            System.Console.WriteLine($"Development State: {env.IsDevelopment()}");
+            System.Console.WriteLine($"Staging State: {env.IsStaging()}");
+            System.Console.WriteLine($"Production State: {env.IsProduction()}");
         }
 
         public IConfigurationRoot Configuration { get; }
+
+        // 通过特殊方法名 Configure{ASPNETCORE_ENVIRONMENT}Services 
+        // 和 Configure{ASPNETCORE_ENVIRONMENT} 可以在不同的环境变量下执行不同的代码
+
+        // Development环境下执行的ConfigureServices方法
+        public void ConfigureDevelopmentServices(IServiceCollection services)
+        {
+            System.Console.WriteLine($"ConfigureDevelopmentServices Excuted.");
+        }
+
+        // Development环境下执行的Configure方法
+        public void ConfigureDevelopment(IApplicationBuilder app, ILoggerFactory loggerFactory, IHostingEnvironment env)
+        {
+            app.Run(async context =>
+            {
+                await context.Response.WriteAsync("ConfigureDevelopment Excuted.");
+            });
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
