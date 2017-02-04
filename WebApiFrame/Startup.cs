@@ -12,6 +12,8 @@ using NLog.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using WebApiFrame.Core.Middlewares;
 using WebApiFrame.Core.Filters;
+using WebApiFrame.Repository;
+using WebApiFrame.Controllers;
 
 namespace WebApiFrame
 {
@@ -54,6 +56,18 @@ namespace WebApiFrame
             // ### 通过ServiceFilter引用
             // 将过滤器类型添加到DI容器里
             //services.AddScoped<MyActionFilterAttribute>();
+
+            // @@@DI方式1 注册接口和实现类的映射关系
+            services.AddScoped<IUserRepository, UserRepository>();
+
+            services.AddScoped<ITestOne, TestOne>();
+            services.AddScoped<ITestTwo, TestTwo>();
+            services.AddScoped<ITestThree, TestThree>();
+
+            services.AddTransient<ITestTransient, TestInstance>();  // transient 瞬时。 每次注入时都生成一个新的实例
+            services.AddScoped<ITestScoped, TestInstance>();  // scoped 域内。 在每一次请求处理流程中创建一个新的实例
+            services.AddSingleton<ITestSingleton, TestInstance>();  // singleton 单例。 第一次注入时创建实例，全应用程序内任何时候都共享这个唯一实例。
+            services.AddTransient<TestService, TestService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,7 +87,7 @@ namespace WebApiFrame
 
             loggerFactory.AddDebug();
 
-            loggerFactory.AddNLog();
+            //loggerFactory.AddNLog();
 
 
             // 添加自定义中间件

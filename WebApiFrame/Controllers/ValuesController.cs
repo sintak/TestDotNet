@@ -3,12 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace WebApiFrame.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        private ILogger<ValuesController> _logger;
+
+        public ValuesController(ILogger<ValuesController> logger, Microsoft.AspNetCore.Hosting.IHostingEnvironment e)
+        {
+            this._logger = logger;
+            this._logger.LogInformation("ValuesController ===========");
+            this._logger.LogDebug($"debug: ApplicationName: {e.ApplicationName}  e.WebRootPath: {e.WebRootPath}");
+            this._logger.LogInformation($"info: ApplicationName: {e.ApplicationName}  e.WebRootPath: {e.WebRootPath}");
+            this._logger.LogError($"error: ApplicationName: {e.ApplicationName}  e.WebRootPath: {e.WebRootPath}");
+        }
+
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()

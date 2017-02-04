@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections;
 using WebApiFrame.Core.Filters;
 using Microsoft.AspNetCore.Mvc.Filters;
+using WebApiFrame.Repository;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,9 +22,12 @@ namespace WebApiFrame.Controllers
     {
         private ILogger<UsersController> _logger;
 
-        public UsersController(ILogger<UsersController> logger)
+        private readonly IUserRepository _userRepository;
+
+        public UsersController(ILogger<UsersController> logger, IUserRepository userRepo)
         {
             this._logger = logger;
+            this._userRepository = userRepo;
         }
 
         public override void OnActionExecuted(ActionExecutedContext context)
@@ -48,13 +52,17 @@ namespace WebApiFrame.Controllers
             _logger.LogWarning("This is Warning Log!");
             _logger.LogError("This is Error Log!");
 
-            var user = new User() { Id = id, Name = "Name:" + id, Sex = "Male" };
+            //var user = new User() { Id = id, Name = "Name:" + id, Sex = "Male" };
+            var user = this._userRepository.GetById(id);
             return new ObjectResult(user);
         }
 
         [HttpGet]
         public IActionResult GetAll() {
-            throw new Exception("GetAll function failed");
+            //throw new Exception("GetAll function failed");
+
+            var list = this._userRepository.GetAll();
+            return new ObjectResult(list);
         }
 
         [HttpPost]
