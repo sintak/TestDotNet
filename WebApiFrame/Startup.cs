@@ -14,6 +14,8 @@ using WebApiFrame.Core.Middlewares;
 using WebApiFrame.Core.Filters;
 using WebApiFrame.Repository;
 using WebApiFrame.Controllers;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 
 namespace WebApiFrame
 {
@@ -32,7 +34,7 @@ namespace WebApiFrame
         public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
             services.AddMvc(
@@ -64,10 +66,21 @@ namespace WebApiFrame
             services.AddScoped<ITestTwo, TestTwo>();
             services.AddScoped<ITestThree, TestThree>();
 
-            services.AddTransient<ITestTransient, TestInstance>();  // transient 瞬时。 每次注入时都生成一个新的实例
-            services.AddScoped<ITestScoped, TestInstance>();  // scoped 域内。 在每一次请求处理流程中创建一个新的实例
-            services.AddSingleton<ITestSingleton, TestInstance>();  // singleton 单例。 第一次注入时创建实例，全应用程序内任何时候都共享这个唯一实例。
-            services.AddTransient<TestService, TestService>();
+            //services.AddTransient<ITestTransient, TestInstance>();  // transient 瞬时。 每次注入时都生成一个新的实例
+            //services.AddScoped<ITestScoped, TestInstance>();  // scoped 域内。 在每一次请求处理流程中创建一个新的实例
+            //services.AddSingleton<ITestSingleton, TestInstance>();  // singleton 单例。 第一次注入时创建实例，全应用程序内任何时候都共享这个唯一实例。
+            //services.AddTransient<TestService, TestService>();
+
+            //// 第三方DI容器 autofac容器
+            var containerBuilder = new ContainerBuilder();
+            containerBuilder.RegisterType<TestInstance>().As<ITestTransient>().InstancePerDependency();
+            containerBuilder.RegisterType<TestInstance>().As<ITestScoped>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<TestInstance>().As<ITestSingleton>().SingleInstance();
+            containerBuilder.RegisterType<TestService>().AsSelf().InstancePerDependency();
+            containerBuilder.Populate(services);
+
+            var container = containerBuilder.Build();
+            return container.Resolve<IServiceProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
