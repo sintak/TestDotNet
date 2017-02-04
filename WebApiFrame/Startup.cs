@@ -36,6 +36,9 @@ namespace WebApiFrame
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();  // 注册Options Pattern服务。将配置内容注册到容器里，来获取对应的服务Provider对象。
+            services.Configure<ConfigOptions>(Configuration.GetSection("CfgContent"));
+
             // Add framework services.
             services.AddMvc(
                 options => {
@@ -140,4 +143,15 @@ namespace WebApiFrame
         }
     }
 
+    public class ConfigOptions
+    {
+        public string Ele1 { get; set; }
+        public SubConfigOptions Ele2 { get; set; }
+    }
+
+    public class SubConfigOptions
+    {
+        public string Sub1 { get; set; }
+        public string Sub2 { get; set; }
+    }
 }

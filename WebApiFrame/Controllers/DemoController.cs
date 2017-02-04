@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -25,15 +26,20 @@ namespace WebApiFrame.Controllers
         //}
         #endregion
 
+        public ConfigOptions _cfgContent { get;  }
+
         #region 生命周期管理
         public ITestTransient _testTransient { get; }
         public ITestScoped _testScoped { get; }
         public ITestSingleton _testSingleton { get; }
         public TestService _testService { get; }
 
-        public DemoController(ITestOne testOne, ITestTwo testTwo, ITestThree testThree,
-            ITestTransient testTransient, ITestScoped testScoped, ITestSingleton testSingleton, TestService testService)
+        public DemoController(ITestOne testOne, ITestTwo testTwo, ITestThree testThree
+            , ITestTransient testTransient, ITestScoped testScoped, ITestSingleton testSingleton, TestService testService
+            , IOptions<ConfigOptions> options
+            )
         {
+            this._cfgContent = options.Value;
 
             _testOne = testOne;
             _testTwo = testTwo;
@@ -97,6 +103,12 @@ namespace WebApiFrame.Controllers
             await HttpContext.Response.WriteAsync($"<h6>Transient => {_testService.TestTransient.TargetId.ToString()}</h6>");
             await HttpContext.Response.WriteAsync($"<h6>Scoped => {_testService.TestScoped.TargetId.ToString()}</h6>");
             await HttpContext.Response.WriteAsync($"<h6>Singleton => {_testService.TestSingleton.TargetId.ToString()}</h6>");
+            #endregion
+
+            #region 配置管理
+            await HttpContext.Response.WriteAsync($"<span>Ele1: {_cfgContent.Ele1}</span><br />");
+            await HttpContext.Response.WriteAsync($"<span>Ele2.Sub1: {_cfgContent.Ele2.Sub1}</span><br />");
+            await HttpContext.Response.WriteAsync($"<span>Ele2.Sub2: {_cfgContent.Ele2.Sub2}</span><br />");
             #endregion
         }
     }
