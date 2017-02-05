@@ -2,8 +2,9 @@
   "testRunner": "xunit",
   "dependencies": {
     "Microsoft.NETCore.App": {
-      "version": "1.0.0",
-      "type": "platform"
+      "version": "1.0.0"
+      //  ,
+      //"type": "platform"  // 自带运行时发布， 这个需要注释掉
     },
     "Microsoft.AspNetCore.Mvc": "1.0.0",
     "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0",
@@ -56,10 +57,14 @@
       "Areas/**/Views",
       "appsettings.json",
       "web.config"
-    ]
+    ],
+    "includeFiles": ["appsettings.json", "nlog.config"]
   },
 
   "scripts": {
     "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
+  },
+  "runtimes": {
+    "win7-x64": {}
   }
 }
