@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using Xunit;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -191,4 +192,16 @@ namespace WebApiFrame.Controllers
         }
     }
 
+    public class DemoModel
+    {
+        public int Add(int a, int b)
+        {
+            return a + b;
+        }
+
+        public bool IsOdd(int num)
+        {
+            return num % 2 == 1;
+        }
+    }
 }
