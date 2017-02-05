@@ -42,19 +42,19 @@ namespace WebApiFrame
         // 和 Configure{ASPNETCORE_ENVIRONMENT} 可以在不同的环境变量下执行不同的代码
 
         // Development环境下执行的ConfigureServices方法
-        public void ConfigureDevelopmentServices(IServiceCollection services)
-        {
-            System.Console.WriteLine($"ConfigureDevelopmentServices Excuted.");
-        }
+        //public void ConfigureDevelopmentServices(IServiceCollection services)
+        //{
+        //    System.Console.WriteLine($"ConfigureDevelopmentServices Excuted.");
+        //}
 
         // Development环境下执行的Configure方法
-        public void ConfigureDevelopment(IApplicationBuilder app, ILoggerFactory loggerFactory, IHostingEnvironment env)
-        {
-            app.Run(async context =>
-            {
-                await context.Response.WriteAsync("ConfigureDevelopment Excuted.");
-            });
-        }
+        //public void ConfigureDevelopment(IApplicationBuilder app, ILoggerFactory loggerFactory, IHostingEnvironment env)
+        //{
+        //    app.Run(async context =>
+        //    {
+        //        await context.Response.WriteAsync("ConfigureDevelopment Excuted.");
+        //    });
+        //}
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
