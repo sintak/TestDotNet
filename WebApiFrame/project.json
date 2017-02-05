@@ -19,7 +19,8 @@
     "NLog.Extensions.Logging": "1.0.0-rtm-alpha5",
     "Autofac.Extensions.DependencyInjection": "4.0.0",
     "xunit": "2.2.0-beta5-build3474",
-    "dotnet-test-xunit": "2.2.0-preview2-build1029"
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "moq.netcore": "4.4.0-beta8"
   },
 
   "tools": {

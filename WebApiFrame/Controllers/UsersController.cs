@@ -30,6 +30,11 @@ namespace WebApiFrame.Controllers
             this._userRepository = userRepo;
         }
 
+        public UsersController(IUserRepository userRepository)
+        {
+            this._userRepository = userRepository;
+        }
+
         public override void OnActionExecuted(ActionExecutedContext context)
         {
             _logger.LogInformation("Controller Executd!");
